@@ -36,23 +36,37 @@ async def authorize() -> gspread.Worksheet | str:
 
     return file.sheet1
 
-async def get_movies() -> dict[str, str]:
+async def get_movies() -> dict[str, tuple[str, str]]:
     sheets_task: Task[gspread.Worksheet | str] = asyncio.create_task(authorize())
 
-    worksheet: gspread.Worksheet = await sheets_task
-
     movie_col: int = 1
+    season_col: int = 2
     status_col: int = 4
     header: str = "Series"
 
-    movies: dict[str, str] = {movie: status for movie, status in zip(worksheet.col_values(movie_col),
-                                                                     worksheet.col_values(status_col))}
-    del movies[header] #remove the sheet's headers, only movies/series
+    worksheet: gspread.Worksheet = await sheets_task
 
-    return movies
+    movies = [movie for movie in worksheet.col_values(movie_col)]
+    seasons = [season for season in worksheet.col_values(season_col)]
+    statuses = [status for status in worksheet.col_values(status_col)]
+
+    del movies[0], seasons[0], statuses[0]
+
+    movies_return = {}
+
+    for index, movie in enumerate(movies):
+        movies_return[movie] = (statuses[index], seasons[index])
+
+    #movies: dict[str, str] = {movie: status for movie, status in zip(worksheet.col_values(movie_col),
+                                                                    # worksheet.col_values(status_col))}
+    #del movies[header] #remove the sheet's headers, only movies/series
+
+    # noinspection PyTypeChecker
+    # movies_return
+    return movies_return
 
 async def main() -> None:
-    movies: dict[str, str] = await get_movies()
+    movies: dict[str, tuple[str, str]] = await get_movies()
 
     print(movies)
 
