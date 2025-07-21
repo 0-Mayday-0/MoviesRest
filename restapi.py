@@ -42,7 +42,6 @@ async def get_movies() -> dict[str, tuple[str, str]]:
     movie_col: int = 1
     season_col: int = 2
     status_col: int = 4
-    header: str = "Series"
 
     worksheet: gspread.Worksheet = await sheets_task
 
