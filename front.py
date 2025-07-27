@@ -81,7 +81,7 @@ class ShowerWindow(sg.Window):
     def next_page(self):
 
         try:
-            if self.current_page + 1 == len(list(self.button_pages))-1:
+            if self.current_page + 1 == len(list(self.button_pages)):
                 raise IndexError
             else:
                 self[self.current_page].update(visible=False)
