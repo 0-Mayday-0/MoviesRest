@@ -67,7 +67,7 @@ class ShowerWindow(sg.Window):
             print(i)
             curr_layout = list(batched(curr_layout, self.cols))
 
-            self.layouts.append(sg.Column(curr_layout, key=i))
+            self.layouts.append(sg.Column(curr_layout, key=i, expand_x=self.expand, expand_y=self.expand))
 
         self.layout(rows=[self.functional_buttons] + [self.layouts])
         self.finalize()
